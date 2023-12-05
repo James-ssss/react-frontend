@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Navbar, Nav, Button, NavLink, Form, Stack} from 'react-bootstrap';
+import {Navbar, Nav, Button, NavLink, Form, Stack, Col, Row} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import NaviBar from './Navibar';
 
@@ -16,6 +16,37 @@ export default function CreateTask(){
         </div>
     ]);
 
+    const addResource = (event) => {
+        event.preventDefault(); // предотвращаем стандартное поведение формы
+        setForms([
+          ...forms,
+          <div key={forms.length}>
+            <Row>
+              <Col sm={8}>
+                <Form flexDirection="column" flexGrowY={1}>
+                  <Form.Group className="mb-3" controlId={`resource-${forms.length}`}>
+                    <Form.Control type="text" placeholder="Ресурс" />
+                  </Form.Group>
+                </Form>
+              </Col>
+              <Col sm={4}>
+                <Form flexDirection="column" flexGrowY={1}>
+                  <Form.Group className="mb-3" controlId={`quantity-${forms.length}`}>
+                    <Form.Control type="text" placeholder="Количество" />
+                  </Form.Group>
+                </Form>
+              </Col>
+            </Row>
+          </div>,
+        ]);
+      };
+    
+      const handleSubmit = (event) => {
+        event.preventDefault();
+        // Ваша логика обработки отправки формы
+      };
+    
+
     return (
       <>
         <Stack gap={2} className="col-md-5 mx-auto">
@@ -27,17 +58,22 @@ export default function CreateTask(){
               setForms([
                 ...forms,
                 <div>
-                  <Form.Select aria-label="Default select example">
-                    <option>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </Form.Select>
-                  <Form flexDirection="column" flexGrowY={1}>
-                    <Form.Group className="mb-3" controlId="formComment">
-                      <Form.Control type="text" placeholder="Ресурс" />
-                    </Form.Group>
-                  </Form>
+                  <Row>
+                  <Col sm={8}>
+                    <Form flexDirection="column" flexGrowY={1} Form onSubmit={handleSubmit}>
+                      <Form.Group className="mb-3" controlId="formComment">
+                        <Form.Control type="text" placeholder="Ресурс" />
+                      </Form.Group>
+                    </Form>
+                  </Col>
+                  <Col sm={4}>
+                    <Form flexDirection="column" flexGrowY={1} Form onSubmit={handleSubmit}>
+                      <Form.Group className="mb-3" controlId="formComment">
+                        <Form.Control type="text" placeholder="Количество" />
+                      </Form.Group>
+                    </Form>
+                  </Col>
+                  </Row>
                 </div>,
               ])
             }
@@ -45,7 +81,7 @@ export default function CreateTask(){
             + Добавить ресурс
           </Button>
           <br />
-          <Form flexDirection="column" flexGrowY={1}>
+          <Form flexDirection="column" flexGrowY={1} Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formComment">
               <Form.Label>Комментарий к заявке</Form.Label>
               <Form.Control type="text" placeholder="Комментарий" />
