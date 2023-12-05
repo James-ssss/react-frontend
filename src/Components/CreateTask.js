@@ -13,6 +13,8 @@ const CreateTask = () => {
 
   const [comment, setComment] = useState("");
 
+  const [address, setAddress] = useState("");
+
   const handleInputChange = (index, fieldName, value) => {
     const updatedForms = [...forms];
     updatedForms[index][fieldName] = value;
@@ -23,9 +25,17 @@ const CreateTask = () => {
     setComment(value);
   };
 
+  const handleInputChangeAddress = (value) => {
+    setAddress(value);
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
     var flag = true;
+    if (address === ""){
+        alert("Адрес не указан");
+        return;
+    }
     forms.forEach((form, index) => {
         if (forms[index].quantity && forms[index].resource !== ""){
         }
@@ -37,6 +47,7 @@ const CreateTask = () => {
     if (flag){
         console.log(forms);
         console.log(comment);
+        console.log(address)
     }
     else alert("Одна из форм не заполнена полностью");
   };
@@ -135,6 +146,18 @@ const CreateTask = () => {
               placeholder="Комментарий"
               // Пример обработчика изменения введенного текста
               onChange={(e) => handleInputChangeCommentary(e.target.value)}
+            />
+          </Form.Group>
+        </Form>
+        <br />
+        <Form flexDirection="column" onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="formComment">
+            <Form.Label>Адрес доставки</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Адрес"
+              // Пример обработчика изменения введенного текста
+              onChange={(e) => handleInputChangeAddress(e.target.value)}
             />
           </Form.Group>
         </Form>
