@@ -25,8 +25,15 @@ const CreateTask = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(forms);
-    console.log(comment);
+    var flag = true;
+    forms.forEach((form, index) => {
+        if (form || index === "") flag=false;
+      });
+    if (flag){
+        console.log(forms);
+        console.log(comment);
+    }
+    else alert("Одна из форм не заполнена полностью");
   };
 
   const handleDelete = (index) => {
