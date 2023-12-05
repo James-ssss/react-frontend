@@ -27,7 +27,12 @@ const CreateTask = () => {
     event.preventDefault();
     var flag = true;
     forms.forEach((form, index) => {
-        if (form || index === "") flag=false;
+        if (forms[index].quantity && forms[index].resource !== ""){
+        }
+        else{
+            flag=false;
+            console.log(index, forms[index].resource, forms[index].quantity);
+        }
       });
     if (flag){
         console.log(forms);
