@@ -13,8 +13,7 @@ export default function NaviBar(){
                         <NavLink><Link to="/CreateTask">Создать заявку</Link></NavLink>
                     </Nav>
                     <Nav>
-                        <Button variant="primary" className="me-2" href="/Login">Log In</Button>
-                        <Button variant="primary">Sign In</Button>
+                        <Button variant="primary">Выйти</Button>
                     </Nav>
                 </Navbar.Collapse>   
             </Navbar>
