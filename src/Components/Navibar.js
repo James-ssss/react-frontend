@@ -10,7 +10,9 @@ export default function NaviBar(){
                 <Navbar.Toggle aria-controls="responsive-navbar-nav"></Navbar.Toggle>
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
-                        <NavLink><Link to="/CreateTask">Создать заявку</Link></NavLink>
+                        <NavLink ><Link to="/CreateTask">Создать новую заявку</Link></NavLink>
+                        <NavLink ><Link to="/CreateUser">Создать пользователя</Link></NavLink>
+                        <NavLink ><Link to="/Tasks">Посмотреть заявки</Link></NavLink>
                     </Nav>
                     <Nav>
                         <Button variant="primary">Выйти</Button>
