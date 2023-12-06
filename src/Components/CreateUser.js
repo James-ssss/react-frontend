@@ -26,7 +26,12 @@ export default function CreateUser() {
         console.log(email, pass, is_staff)
         const bodyData = {
             email: email,
-            pass: pass,
+            is_superuser: "",
+            first_name: "",
+            last_name: "",
+            second_name: "",
+            is_active: "",
+            password: pass,
             is_staff: is_staff
           };
     
@@ -35,7 +40,7 @@ export default function CreateUser() {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-              },
+            },
               body: JSON.stringify(bodyData),
             });
     
