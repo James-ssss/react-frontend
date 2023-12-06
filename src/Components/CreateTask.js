@@ -29,7 +29,7 @@ const CreateTask = () => {
     setAddress(value);
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     var flag = true;
     if (address === ""){
@@ -45,9 +45,29 @@ const CreateTask = () => {
         }
       });
     if (flag){
-        console.log(forms);
-        console.log(comment);
-        console.log(address)
+      const bodyData = {
+        forms: forms,
+        comment: comment,
+        address, address,
+      };
+      console.log(bodyData);
+      try {
+        const response = await fetch("http://127.0.0.1:5000/order/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+        },
+          body: JSON.stringify(bodyData),
+        });
+
+        if (response.ok) {
+          console.log("Заявка успешно создана!");
+        } else {
+          console.error("Ошибка при создании заявки");
+        }
+      } catch (error) {
+        console.error("Произошла ошибка", error);
+      }
     }
     else alert("Одна из форм не заполнена полностью");
   };
