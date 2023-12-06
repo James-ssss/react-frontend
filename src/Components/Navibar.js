@@ -12,7 +12,7 @@ export default function NaviBar(){
                     <Nav className="me-auto">
                         <NavLink ><Link to="/CreateTask">Создать новую заявку</Link></NavLink>
                         <NavLink ><Link to="/CreateUser">Создать пользователя</Link></NavLink>
-                        <NavLink ><Link to="/Tasks">Посмотреть мои заявки</Link></NavLink>
+                        <NavLink ><Link to="/Tasks">Посмотреть заявки</Link></NavLink>
                     </Nav>
                     <Nav>
                         <Button variant="primary">Выйти</Button>
