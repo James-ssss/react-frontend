@@ -31,7 +31,7 @@ export default function CreateUser() {
           };
     
           try {
-            const response = await fetch("http://127.0.0.1:5000/User/Create", {
+            const response = await fetch("http://127.0.0.1:5000/user/create", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
