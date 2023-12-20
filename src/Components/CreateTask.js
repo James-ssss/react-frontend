@@ -1,9 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, Stack, Col, Row } from "react-bootstrap";
+import { Redirect, useNavigate } from "react-router-dom";
 
 
 
 const CreateTask = () => {
+
+  const GetMaterials = async () => {
+    try{
+      const response = await fetch("http://127.0.0.1:8080/material/all", {
+        method: "GET",
+      });
+      console.log(response.json());
+    }
+    catch{
+
+    }
+  }
+
+  const navigate = useNavigate();
+
   const [forms, setForms] = useState([
     {
       resource: "",
@@ -14,6 +30,8 @@ const CreateTask = () => {
   const [comment, setComment] = useState("");
 
   const [address, setAddress] = useState("");
+
+  GetMaterials();
 
   const handleInputChange = (index, fieldName, value) => {
     const updatedForms = [...forms];
@@ -47,8 +65,10 @@ const CreateTask = () => {
     if (flag){
       const bodyData = {
         forms: forms,
+        user_id: 1,
+        address_id: 1,
         comment: comment,
-        address, address,
+        address: address,
       };
       console.log(bodyData);
       try {
@@ -65,7 +85,8 @@ const CreateTask = () => {
         } else {
           console.error("Ошибка при создании заявки");
         }
-      } catch (error) {
+      } 
+      catch (error) {
         console.error("Произошла ошибка", error);
       }
     }
@@ -77,6 +98,16 @@ const CreateTask = () => {
     const updatedForms = forms.filter((_, i) => i !== index);
     setForms(updatedForms);
   };
+
+  if (localStorage.getItem('jwt') === null) return (
+    <>
+      <div style={{
+                backgroundColor: "red",
+                padding: "10px",
+                borderRadius: "10px",
+              }}>Доступ запрещен</div>
+    </>
+  )
 
   return (
     <>

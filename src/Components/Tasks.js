@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Button, Collapse } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 export default function Tasks() {
   const [open, setOpen] = useState(false);
   const [tasks, setTasks] = useState([]);
+
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -26,6 +30,16 @@ export default function Tasks() {
 
     fetchTasks();
   }, []);
+
+  if (localStorage.getItem('jwt') === null) return (
+    <>
+      <div style={{
+                backgroundColor: "red",
+                padding: "10px",
+                borderRadius: "10px",
+              }}>Доступ запрещен</div>
+    </>
+  )
 
   return (
     <>
