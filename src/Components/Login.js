@@ -1,8 +1,23 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 
 export default function Login() {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+     {
+      if (localStorage.getItem('jwt') != null){
+        console.log('123');
+        window.location.reload();
+        navigate("/CreateTask");
+        return;
+      }
+      
+    }
+  }, [navigate]);
+
   const [email, setEmail] = useState("");
 
   const [pass, setPass] = useState("");
@@ -15,12 +30,44 @@ export default function Login() {
     setPass(value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit =  async (event) => {
     event.preventDefault();
     if (email && pass !== ""){
-      return;
+      const bodyData = {
+        email: email,
+        password: pass
+      };
+      console.log(bodyData);
+      if (email === '123@mail.ru' && pass === '123'){
+        localStorage.setItem('jwt', 'someToken')
+        window.location.reload();
+      }
+      else alert("Неправильные email или пароль")
+      /*
+      try {
+        const response = await fetch("http://127.0.0.1:5000/check", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+        },
+          body: JSON.stringify(bodyData),
+        });
+
+        if (response.ok) {
+          var jwt = JSON.parse(response).token;
+          localStorage.setItem('jwt', jwt);
+          return redirect('/auth')
+        } 
+        else {
+          alert("Неправильный логин или пароль");
+        }
+      } 
+      catch (error) {
+        console.error("Произошла ошибка", error);
+      }
+      */
     }
-    else alert("Почта или пароль пусты");;
+    else alert("Почта или пароль пусты");
   };
   
   return (

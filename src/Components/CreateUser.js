@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateUser() {
+
+  const navigate = useNavigate();
+
     const [email, setEmail] = useState("");
 
     const [pass, setPass] = useState("");
@@ -56,6 +60,15 @@ export default function CreateUser() {
       else alert("Почта, роль или пароль пусты");;
     };
 
+  if (localStorage.getItem('jwt') === null) return (
+    <>
+      <div style={{
+                backgroundColor: "red",
+                padding: "10px",
+                borderRadius: "10px",
+              }}>Доступ запрещен</div>
+    </>
+  )
   return (
     <>
       <div style={{ display: "flex", justifyContent: "center" }}>
