@@ -6,17 +6,21 @@ import { Redirect, useNavigate } from "react-router-dom";
 
 const CreateTask = () => {
 
-  const GetMaterials = async () => {
-    try{
-      const response = await fetch("http://127.0.0.1:8080/material/all", {
-        method: "GET",
-      });
-      console.log(response.json());
-    }
-    catch{
+  useEffect(() => {
+    const fetchMaterials = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8080/material/all");
+        response
+          .json()
+          .then(data => setMaterials(data))
+          .catch(error => console.error("Ошибка при получении материалов", error));
+      } catch (error) {
+        console.error("Ошибка при получении материалов", error);
+      }
+    };    
 
-    }
-  }
+    fetchMaterials();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -27,11 +31,11 @@ const CreateTask = () => {
     },
   ]);
 
+  const [materials, setMaterials] = useState([]);
+
   const [comment, setComment] = useState("");
 
   const [address, setAddress] = useState("");
-
-  GetMaterials();
 
   const handleInputChange = (index, fieldName, value) => {
     const updatedForms = [...forms];
@@ -108,7 +112,6 @@ const CreateTask = () => {
               }}>Доступ запрещен</div>
     </>
   )
-
   return (
     <>
       <div style={{ display: "flex", justifyContent: "center" }}>
@@ -126,17 +129,17 @@ const CreateTask = () => {
               }}
             >
               <Row>
-                <Col md={9} lg={9}>
+                <Row>
+                <Col md={7} lg={7}>
                   <Form flexDirection="column" onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="formComment">
-                      <Form.Control
-                        type="text"
-                        placeholder="Ресурс"
-                        value={form.resource}
-                        onChange={(e) =>
-                          handleInputChange(index, "resource", e.target.value)
-                        }
-                      />
+                    <Form.Select aria-label="Default select example">
+                      {materials.map((item, index) => (
+                        <option key={index} value={item.value}>
+                          {item.name}
+                        </option>
+                      ))}
+                  </Form.Select>
                     </Form.Group>
                   </Form>
                 </Col>
@@ -154,20 +157,23 @@ const CreateTask = () => {
                     </Form.Group>
                   </Form>
                 </Col>
-                <Col
-                  md={12}
-                  lg={12}
-                  className="d-flex justify-content-center align-items-center"
-                >
-                  <Button
-                    variant="danger"
-                    type="button"
-                    style={{ width: "33%" }}
-                    onClick={() => handleDelete(index)}
+                </Row>
+                <Row>
+                  <Col
+                    md={12}
+                    lg={12}
+                    className="d-flex justify-content-center align-items-center"
                   >
-                    Удалить
-                  </Button>
-                </Col>
+                    <Button
+                      variant="danger"
+                      type="button"
+                      style={{ width: "33%" }}
+                      onClick={() => handleDelete(index)}
+                    >
+                      Удалить
+                    </Button>
+                  </Col>
+                </Row>
               </Row>
             </div>
             <br />
