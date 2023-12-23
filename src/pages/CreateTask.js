@@ -6,14 +6,35 @@ import { Redirect, useNavigate } from "react-router-dom";
 
 const CreateTask = () => {
 
+  const navigate = useNavigate();
+
+  const [materials, setMaterials] = useState([]);
+
+  const [forms, setForms] = useState([
+    {
+      resource: "",
+      quantity: "",
+      measurement: "",
+    }
+  ]);
+
+  const [comment, setComment] = useState("");
+
+  const [address, setAddress] = useState("");
+
   useEffect(() => {
     const fetchMaterials = async () => {
       try {
         const response = await fetch("http://127.0.0.1:8080/material/all");
         response
           .json()
-          .then(data => setMaterials(data))
+          .then(data => {
+            forms[0].resource = data[0].name;
+            forms[0].measurement = data[0].units;
+            setMaterials(data);
+          })
           .catch(error => console.error("Ошибка при получении материалов", error));
+
       } catch (error) {
         console.error("Ошибка при получении материалов", error);
       }
@@ -21,21 +42,6 @@ const CreateTask = () => {
 
     fetchMaterials();
   }, []);
-
-  const navigate = useNavigate();
-
-  const [forms, setForms] = useState([
-    {
-      resource: "",
-      quantity: "",
-    },
-  ]);
-
-  const [materials, setMaterials] = useState([]);
-
-  const [comment, setComment] = useState("");
-
-  const [address, setAddress] = useState("");
 
   const handleInputChange = (index, fieldName, value) => {
     const updatedForms = [...forms];
@@ -112,6 +118,7 @@ const CreateTask = () => {
               }}>Доступ запрещен</div>
     </>
   )
+
   return (
     <>
       <div style={{ display: "flex", justifyContent: "center" }}>
@@ -133,13 +140,24 @@ const CreateTask = () => {
                 <Col md={7} lg={7}>
                   <Form flexDirection="column" onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="formComment">
-                    <Form.Select aria-label="Default select example">
-                      {materials.map((item, index) => (
-                        <option key={index} value={item.value}>
-                          {item.name}
-                        </option>
-                      ))}
-                  </Form.Select>
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) =>{
+                        handleInputChange(index, "resource", e.target.value);
+                        var meas = "";
+                        for (var i = 0; i < materials.length; i++){
+                          if (materials[i].name == e.target.value){
+                            meas = materials[i].units;
+                          }
+                        }
+                        forms[index].measurement = meas;
+                      }}>
+                        {
+                          materials.map((item, ind) => (
+                          <option key={ind} value={item.value}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </Form.Select>
                     </Form.Group>
                   </Form>
                 </Col>
@@ -151,11 +169,19 @@ const CreateTask = () => {
                         placeholder="Количество"
                         value={form.quantity}
                         onChange={(e) =>
-                          handleInputChange(index, "quantity", e.target.value)
+                          {
+                            console.log(forms);
+                            handleInputChange(index, "quantity", e.target.value);
+                          }
                         }
                       />
                     </Form.Group>
                   </Form>
+                </Col>
+                <Col md={3} lg={3}>
+                  <div>
+                    {forms[index].measurement}
+                  </div>
                 </Col>
                 </Row>
                 <Row>
@@ -182,14 +208,19 @@ const CreateTask = () => {
         <Button
           variant="primary"
           type="submit"
-          onClick={() =>
-            setForms([
-              ...forms,
-              {
-                resource: "",
-                quantity: "",
-              },
-            ])
+          onClick={(e) =>
+            {
+              console.log(forms);
+              setForms([
+                ...forms,
+                {
+                  resource: materials[0].name,
+                  quantity: "",
+                  measurement: materials[0].units,
+                },
+              ]);
+              console.log(forms);
+            }
           }
         >
           + Добавить ресурс
