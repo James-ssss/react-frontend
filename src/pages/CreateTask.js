@@ -8,13 +8,14 @@ const CreateTask = () => {
 
   const [materials, setMaterials] = useState([]);
 
+  const [date, setDate] = useState("");
+
   const [forms, setForms] = useState([
     {
       resource: "",
       quantity: "",
       measurement: "",
       category: "",
-      date: "",
     }
   ]);
 
@@ -29,6 +30,7 @@ const CreateTask = () => {
         response
           .json()
           .then(data => {
+            forms[0].id_ = data[0].id_;
             forms[0].resource = data[0].name;
             forms[0].measurement = data[0].units;
             forms[0].category = data[0].category_id;
@@ -58,6 +60,19 @@ const CreateTask = () => {
     setAddress(value);
   }
 
+  const getResources = () => {
+    var resources = [];
+    for (var i=0; i < forms.length; i++){
+      resources.push(
+        {
+          id_: forms[i].id_,
+          quantity: forms[i].quantity
+        }
+      );
+    }
+    return resources;
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     var flag = true;
@@ -65,6 +80,10 @@ const CreateTask = () => {
         alert("Адрес не указан");
         return;
     }
+    if (date === ""){
+      alert("Дата не указана");
+      return;
+  }
     forms.forEach((form, index) => {
         if (forms[index].quantity && forms[index].resource !== ""){
         }
@@ -74,16 +93,16 @@ const CreateTask = () => {
         }
       });
     if (flag){
+      var resources = getResources();
       const bodyData = {
-        forms: forms,
-        user_id: 1,
-        address_id: 1,
+        resources: resources,
         comment: comment,
         address: address,
+        date_selected: date, 
       };
       console.log(bodyData);
       try {
-        const response = await fetch("http://127.0.0.1:5000/order/create", {
+        const response = await fetch("http://127.0.0.1:8080/order/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -146,14 +165,17 @@ const CreateTask = () => {
                         handleInputChange(index, "resource", e.target.value);
                         var meas = "";
                         var cat ="";
+                        var id_ = "";
                         for (var i = 0; i < materials.length; i++){
                           if (materials[i].name == e.target.value){
                             meas = materials[i].units;
                             cat = materials[i].category_id;
+                            id_ = materials[i].id_;
                           }
                         }
                         forms[index].measurement = meas;
                         forms[index].category = cat;
+                        forms[index].id_ = id_;
                       }}>
                         {
                           materials.map((item, ind) => (
@@ -187,14 +209,6 @@ const CreateTask = () => {
                     {forms[index].measurement}
                   </div>
                 </Col>
-                {forms[index].category === "Спецтехника" && (
-                  <Col md={3} lg={3}>
-                    <input type="date" onChange={(e) => {
-                      forms[index].date = e.target.value;
-                      console.log(forms);
-                    }}></input>
-                  </Col>
-                )}
                 </Row>
                 <Row>
                   <Col
@@ -252,6 +266,15 @@ const CreateTask = () => {
           </Form.Group>
         </Form>
         <br />
+        <Form flexDirection="column" onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="formComment">
+            <Form.Label>Дата доставки</Form.Label>
+            <br></br>
+            <input type="date" onChange={(e) => setDate(e.target.value)}>
+            </input>
+          </Form.Group>
+        </Form>
+        <br/>
         <Form flexDirection="column" onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formComment">
             <Form.Label>Адрес доставки</Form.Label>
