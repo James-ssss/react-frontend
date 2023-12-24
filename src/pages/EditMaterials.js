@@ -166,7 +166,7 @@ export default function EditMaterials() {
             <Form.Label>Название</Form.Label>
             <Form.Control
               type=""
-              placeholder="Введите новое название материла"
+              placeholder="Введите новое название материала"
               onChange={(e) => {
                 handleInputChangeName(e.target.value);
               }}
