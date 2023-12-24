@@ -189,7 +189,10 @@ const CreateTask = () => {
                 </Col>
                 {forms[index].category === "Спецтехника" && (
                   <Col md={3} lg={3}>
-                    <input type="date"></input>
+                    <input type="date" onChange={(e) => {
+                      forms[index].date = e.target.value;
+                      console.log(forms);
+                    }}></input>
                   </Col>
                 )}
                 </Row>
