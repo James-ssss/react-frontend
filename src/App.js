@@ -8,6 +8,9 @@ import CreateTask from './pages/CreateTask';
 import Login from './pages/Login';
 import Tasks from './pages/Tasks'
 import CreateUser from './pages/CreateUser';
+import Materials from './pages/Materials';
+import CreateMaterials from './pages/CreateMaterials';
+import EditMaterials from './pages/EditMaterials';
 function App() {
   return (
     <>
@@ -18,6 +21,9 @@ function App() {
       <Route path='/Login' Component={Login}/>
       <Route path='/CreateUser' Component={CreateUser}/>
       <Route path='/Tasks' Component={Tasks}/>
+      <Route path='/Materials' Component={Materials}/>
+      <Route path='/Materials/Create' Component={CreateMaterials}/>
+      <Route path='/Materials/Edit' Component={EditMaterials}/>
     </Routes>
     </Router>
     

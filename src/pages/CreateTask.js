@@ -64,8 +64,8 @@ const CreateTask = () => {
     for (var i=0; i < forms.length; i++){
       resources.push(
         {
-          id_: forms[i].id_,
-          quantity: forms[i].quantity
+          material_id: forms[i].id_,
+          count: forms[i].quantity
         }
       );
     }
