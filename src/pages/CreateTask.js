@@ -6,8 +6,6 @@ import { Redirect, useNavigate } from "react-router-dom";
 
 const CreateTask = () => {
 
-  const navigate = useNavigate();
-
   const [materials, setMaterials] = useState([]);
 
   const [forms, setForms] = useState([
@@ -15,6 +13,8 @@ const CreateTask = () => {
       resource: "",
       quantity: "",
       measurement: "",
+      category: "",
+      date: "",
     }
   ]);
 
@@ -31,6 +31,7 @@ const CreateTask = () => {
           .then(data => {
             forms[0].resource = data[0].name;
             forms[0].measurement = data[0].units;
+            forms[0].category = data[0].category_id;
             setMaterials(data);
           })
           .catch(error => console.error("Ошибка при получении материалов", error));
@@ -144,17 +145,20 @@ const CreateTask = () => {
                       onChange={(e) =>{
                         handleInputChange(index, "resource", e.target.value);
                         var meas = "";
+                        var cat ="";
                         for (var i = 0; i < materials.length; i++){
                           if (materials[i].name == e.target.value){
                             meas = materials[i].units;
+                            cat = materials[i].category_id;
                           }
                         }
                         forms[index].measurement = meas;
+                        forms[index].category = cat;
                       }}>
                         {
                           materials.map((item, ind) => (
                           <option key={ind} value={item.value}>
-                            {item.name}
+                            {item.name} 
                           </option>
                         ))}
                       </Form.Select>
@@ -183,6 +187,11 @@ const CreateTask = () => {
                     {forms[index].measurement}
                   </div>
                 </Col>
+                {forms[index].category === "Спецтехника" && (
+                  <Col md={3} lg={3}>
+                    <input type="date"></input>
+                  </Col>
+                )}
                 </Row>
                 <Row>
                   <Col
@@ -217,6 +226,8 @@ const CreateTask = () => {
                   resource: materials[0].name,
                   quantity: "",
                   measurement: materials[0].units,
+                  category: materials[0].category,
+                  date: "",
                 },
               ]);
               console.log(forms);
