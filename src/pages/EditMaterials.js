@@ -8,8 +8,10 @@ export default function EditMaterials() {
   const [materials, setMaterials] = useState([]);
   const [categories, setCategories] = useState([]);
   const [unitsList, setUnitsList] = useState([]);
+  const [id_, setId] = useState("");
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
+  const [categoryString, setCategoryString] = useState("");
   const [units, setUnits] = useState("");
 
   useEffect(() => {
@@ -44,21 +46,71 @@ export default function EditMaterials() {
     fetchMaterials();
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const mat = null;
+    for (var i = 0; i < materials.length; i++){
+        if (materials[i].id_ === id_) mat = materials[i]
+    }
+    if (mat === null){
+        alert("Что-то пошло не так, попробуйте позже")
+        return
+    }
+    if (mat.name === name && mat.units === units && mat.category === categoryString){
+        alert("Нельзя редактировать материал, ничего в нём не поменяв")
+        return
+    }
 
+    sendRequest()
   }
+
+  const sendRequest = async () => {
+    try {
+        const response = await fetch(`${API_SERVER}/material/update/${id_}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            category_id: category,
+            name: name,
+            units: units,
+          }),
+        });
+
+        if (response.ok) {
+          alert("Материал был обновлен")
+        } else {
+            alert("Материал не был обновлен, обратитесь к администратору")
+        }
+      } catch (error) {
+        console.error("Error during material editing", error);
+        alert("Произошла ошибка во время отправки запроса");
+      }
+  };
 
   const handleInputChangeName = (value) => {
     setName(value);
   };
 
+  const handleInputChangeId = (value) => {
+    var e = "";
+    for (var i = 0; i < materials.length; i++) {
+        if (materials[i].name === value) e = materials[i].id_;
+      }
+    setId(value);
+  };
+
   const handleInputChangeCategory = (value) => {
     var e = "";
     for (var i = 0; i < categories.length; i++) {
-      if (categories[i].name === value) e = categories[i].id_;
+      if (categories[i].name === value){
+        e = categories[i];
+      }
     }
     console.log(e);
-    setCategory(e);
+    setCategoryString(e.name)
+    setCategory(e.id_);
   };
 
   const handleInputChangeUnits = (value) => {
@@ -98,7 +150,7 @@ export default function EditMaterials() {
           <Form.Group className="mb-3" controlId="formComment">
                     <Form.Select
                       aria-label="Default select example" onChange={(e) => {
-                        handleInputChangeName(e.target.value)
+                        handleInputChangeId(e.target.value)
                       }}>
                         <option>
                             Выберите материал из списка
