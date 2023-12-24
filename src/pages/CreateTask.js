@@ -26,7 +26,7 @@ const CreateTask = () => {
   useEffect(() => {
     const fetchMaterials = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8080/material/all");
+        const response = await fetch("http://127.0.0.1:8000/material/all");
         response
           .json()
           .then(data => {
@@ -102,7 +102,7 @@ const CreateTask = () => {
       };
       console.log(bodyData);
       try {
-        const response = await fetch("http://127.0.0.1:8080/order/create", {
+        const response = await fetch("http://127.0.0.1:8000/order/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
