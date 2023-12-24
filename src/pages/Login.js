@@ -1,128 +1,120 @@
 import React, { useState, useEffect } from "react";
-import { Link, redirect, useNavigate } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { API_SERVER } from "../serverAddresses";
 
-export default function Login() {
-
+const Login = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false); // Добавлен новый стейт
 
   useEffect(() => {
-     {
-      if (localStorage.getItem('jwt') != null){
-        console.log('123');
-        window.location.reload();
-        navigate("/CreateTask");
-        return;
-      }
-      
+    const jwtToken = localStorage.getItem("jwt");
+    if (jwtToken) {
+      console.log("Already logged in");
+      setLoggedIn(true); // Устанавливаем флаг в true при наличии токена
+      navigate("/CreateTask");
     }
   }, [navigate]);
 
-  const [email, setEmail] = useState("");
-
-  const [pass, setPass] = useState("");
-
-  const handleInputChangeEmail = (value) => {
-    setEmail(value);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "email") {
+      setEmail(value);
+    } else if (name === "password") {
+      setPassword(value);
+    }
   };
 
-  const handleInputChangePass = (value) => {
-    setPass(value);
-  };
-
-  const handleSubmit =  async (event) => {
-    event.preventDefault();
-    if (email && pass !== ""){
-      const bodyData = {
-        email: email,
-        password: pass
-      };
-      console.log(bodyData);
-      if (email === '123@mail.ru' && pass === '123'){
-        localStorage.setItem('jwt', 'someToken')
-        window.location.reload();
-      }
-      else alert("Неправильные email или пароль")
-      /*
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (email && password) {
       try {
-        const response = await fetch("http://127.0.0.1:5000/check", {
+        const response = await fetch(`${API_SERVER}/user/auth`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-        },
-          body: JSON.stringify(bodyData),
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
         });
 
         if (response.ok) {
-          var jwt = JSON.parse(response).token;
-          localStorage.setItem('jwt', jwt);
-          return redirect('/auth')
-        } 
-        else {
-          alert("Неправильный логин или пароль");
+          const { access_token } = await response.json();
+          localStorage.setItem("jwt", access_token);
+          setLoggedIn(true); // Устанавливаем флаг в true после успешной авторизации
+          navigate("/CreateTask");
+        } else {
+          console.error("Authentication failed");
+          alert("Неправильные email или пароль");
         }
-      } 
-      catch (error) {
-        console.error("Произошла ошибка", error);
+      } catch (error) {
+        console.error("Error during authentication:", error);
+        alert("Произошла ошибка во время аутентификации");
       }
-      */
+    } else {
+      alert("Почта или пароль пусты");
     }
-    else alert("Почта или пароль пусты");
   };
-  
+
   return (
     <>
-      <br></br>
-      <br></br>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          backgroundColor: "lightblue",
-          width: "50%",
-          margin: "auto",
-          padding: "15px",
-          flexDirection: "column",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <h1>Авторизация</h1>
-        </div>
-        <Form flexDirection="column" onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Почта</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Введите почту"
-              onChange={(e) => {
-                handleInputChangeEmail(e.target.value);
-              }}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Пароль</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Введите пароль"
-              onChange={(e) => {
-                handleInputChangePass(e.target.value);
-              }}
-            />
-          </Form.Group>
-          <Form.Text className="text-muted">
-            Не делитесь паролем ни с кем.
-          </Form.Text>
-          <br></br>
-          <br></br>
+      <br />
+      <br />
+      {loggedIn ? null : (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: "lightblue",
+            width: "50%",
+            margin: "auto",
+            padding: "15px",
+            flexDirection: "column",
+          }}
+        >
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <Button variant="primary" type="submit" onSubmit={handleSubmit}>
-              Войти
-            </Button>
+            <h1>Авторизация</h1>
           </div>
-          <br></br>
-        </Form>
-      </div>
+          <Form flexDirection="column" onSubmit={handleSubmit}>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Почта</Form.Label>
+              <Form.Control
+                type="email"
+                name="email"
+                placeholder="Введите почту"
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+  
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Пароль</Form.Label>
+              <Form.Control
+                type="password"
+                name="password"
+                placeholder="Введите пароль"
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+            <Form.Text className="text-muted">
+              Не делитесь паролем ни с кем.
+            </Form.Text>
+            <br />
+            <br />
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Button variant="primary" type="submit">
+                Войти
+              </Button>
+            </div>
+            <br />
+          </Form>
+        </div>
+      )}
     </>
   );
-}
+};
+
+export default Login;

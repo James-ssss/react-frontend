@@ -1,0 +1,1 @@
+export const API_SERVER = 'http://31.129.110.13:8000';

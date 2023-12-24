@@ -1,52 +1,54 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Stack, Col, Row } from "react-bootstrap";
-import { Redirect, useNavigate } from "react-router-dom";
-
-
+import { useNavigate } from "react-router-dom";
+import { API_SERVER } from "../serverAddresses";
 
 const CreateTask = () => {
-
   const navigate = useNavigate();
 
   const [materials, setMaterials] = useState([]);
-
   const [forms, setForms] = useState([
     {
       resource: "",
       quantity: "",
       measurement: "",
-    }
+    },
   ]);
-
   const [comment, setComment] = useState("");
-
   const [address, setAddress] = useState("");
+  const [date, setDate] = useState("");
 
   useEffect(() => {
     const fetchMaterials = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8080/material/all");
-        response
-          .json()
-          .then(data => {
-            forms[0].resource = data[0].name;
-            forms[0].measurement = data[0].units;
-            setMaterials(data);
-          })
-          .catch(error => console.error("Ошибка при получении материалов", error));
+        const response = await fetch(`${API_SERVER}/material/all`);
+        const data = await response.json();
 
+        if (response.ok) {
+          setMaterials(data);
+          setForms((prevForms) => {
+            const updatedForms = [...prevForms];
+            updatedForms[0].resource = data[0].name;
+            updatedForms[0].measurement = data[0].units;
+            return updatedForms;
+          });
+        } else {
+          console.error("Ошибка при получении материалов");
+        }
       } catch (error) {
         console.error("Ошибка при получении материалов", error);
       }
-    };    
+    };
 
     fetchMaterials();
   }, []);
 
   const handleInputChange = (index, fieldName, value) => {
-    const updatedForms = [...forms];
-    updatedForms[index][fieldName] = value;
-    setForms(updatedForms);
+    setForms((prevForms) => {
+      const updatedForms = [...prevForms];
+      updatedForms[index][fieldName] = value;
+      return updatedForms;
+    });
   };
 
   const handleInputChangeCommentary = (value) => {
@@ -55,69 +57,86 @@ const CreateTask = () => {
 
   const handleInputChangeAddress = (value) => {
     setAddress(value);
+  };
+
+  const getResources = () => {
+    var resources = [];
+    for (var i=0; i < forms.length; i++){
+      resources.push(
+        {
+          id_: forms[i].id_,
+          quantity: forms[i].quantity
+        }
+      );
+    }
+    return resources;
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    var flag = true;
-    if (address === ""){
-        alert("Адрес не указан");
-        return;
+    if (address === "") {
+      alert("Адрес не указан");
+      return;
     }
-    forms.forEach((form, index) => {
-        if (forms[index].quantity && forms[index].resource !== ""){
-        }
-        else{
-            flag=false;
-            console.log(index, forms[index].resource, forms[index].quantity);
-        }
-      });
-    if (flag){
+
+    const isFormsValid = forms.every(
+      (form) => form.quantity.trim() !== "" && form.resource.trim() !== ""
+    );
+
+    if (!isFormsValid) {
+      alert("Одна из форм не заполнена полностью");
+      return;
+    }
+
+    var resources = getResources();
       const bodyData = {
-        forms: forms,
-        user_id: 1,
-        address_id: 1,
+        resources: resources,
         comment: comment,
         address: address,
+        date_selected: date, 
       };
-      console.log(bodyData);
-      try {
-        const response = await fetch("http://127.0.0.1:5000/order/create", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-        },
-          body: JSON.stringify(bodyData),
-        });
 
-        if (response.ok) {
-          console.log("Заявка успешно создана!");
-        } else {
-          console.error("Ошибка при создании заявки");
-        }
-      } 
-      catch (error) {
-        console.error("Произошла ошибка", error);
+      console.log(bodyData)
+      console.log(forms)
+      try {
+      const response = await fetch(`${API_SERVER}/order/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyData),
+      });
+
+      if (response.ok) {
+        console.log("Заявка успешно создана!");
+      } else {
+        console.error("Ошибка при создании заявки");
       }
+    } catch (error) {
+      console.error("Произошла ошибка", error);
     }
-    else alert("Одна из форм не заполнена полностью");
   };
 
   const handleDelete = (index) => {
-    if (forms.length == 1) return;
-    const updatedForms = forms.filter((_, i) => i !== index);
-    setForms(updatedForms);
+    if (forms.length === 1) return;
+    setForms((prevForms) => prevForms.filter((_, i) => i !== index));
   };
 
-  if (localStorage.getItem('jwt') === null) return (
-    <>
-      <div style={{
-                backgroundColor: "red",
-                padding: "10px",
-                borderRadius: "10px",
-              }}>Доступ запрещен</div>
-    </>
-  )
+  if (!localStorage.getItem("jwt")) {
+    return (
+      <>
+        <div
+          style={{
+            backgroundColor: "red",
+            padding: "10px",
+            borderRadius: "10px",
+          }}
+        >
+          Доступ запрещен
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -136,70 +155,73 @@ const CreateTask = () => {
               }}
             >
               <Row>
-                <Row>
                 <Col md={7} lg={7}>
-                  <Form flexDirection="column" onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="formComment">
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) =>{
-                        handleInputChange(index, "resource", e.target.value);
-                        var meas = "";
-                        for (var i = 0; i < materials.length; i++){
-                          if (materials[i].name == e.target.value){
-                            meas = materials[i].units;
-                          }
-                        }
-                        forms[index].measurement = meas;
-                      }}>
-                        {
-                          materials.map((item, ind) => (
-                          <option key={ind} value={item.value}>
-                            {item.name}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </Form.Group>
-                  </Form>
-                </Col>
-                <Col md={3} lg={3}>
-                  <Form flexDirection="column" onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="formComment">
-                      <Form.Control
-                        type="text"
-                        placeholder="Количество"
-                        value={form.quantity}
-                        onChange={(e) =>
-                          {
-                            console.log(forms);
-                            handleInputChange(index, "quantity", e.target.value);
-                          }
-                        }
-                      />
-                    </Form.Group>
-                  </Form>
-                </Col>
-                <Col md={3} lg={3}>
-                  <div>
-                    {forms[index].measurement}
-                  </div>
-                </Col>
-                </Row>
-                <Row>
-                  <Col
-                    md={12}
-                    lg={12}
-                    className="d-flex justify-content-center align-items-center"
-                  >
-                    <Button
-                      variant="danger"
-                      type="button"
-                      style={{ width: "33%" }}
-                      onClick={() => handleDelete(index)}
+                  <Form.Group className="mb-3" controlId="formComment">
+                    <Form.Select
+                      aria-label="Default select example"
+                      onChange={(e) => {
+                        handleInputChange(
+                          index,
+                          "resource",
+                          e.target.value
+                        );
+                        const measurement = materials.find(
+                          (item) => item.name === e.target.value
+                        )?.units;
+                        setForms((prevForms) => {
+                          const updatedForms = [...prevForms];
+                          updatedForms[index].measurement = measurement;
+                          return updatedForms;
+                        });
+                      }}
                     >
-                      Удалить
-                    </Button>
-                  </Col>
-                </Row>
+                      {materials.map((item, ind) => (
+                        <option key={ind} value={item.name}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+                <Col md={3} lg={3}>
+                  <Form.Group className="mb-3" controlId="formComment">
+                    <Form.Control
+                      type="text"
+                      placeholder="Количество"
+                      value={form.quantity}
+                      onChange={(e) =>
+                        {handleInputChange(index, "quantity", e.target.value)
+                        var id_ = ""
+                        for (var i= 0; i < materials.length; i++)
+                        {
+                          if (materials[i].name === form.resource){
+                            id_ = materials[i].id_
+                          }
+                        }
+                        handleInputChange(index, "id_", id_)
+                      }}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={2} lg={2}>
+                  <div>{form.measurement}</div>
+                </Col>
+              </Row>
+              <Row>
+                <Col
+                  md={12}
+                  lg={12}
+                  className="d-flex justify-content-center align-items-center"
+                >
+                  <Button
+                    variant="danger"
+                    type="button"
+                    style={{ width: "33%" }}
+                    onClick={() => handleDelete(index)}
+                  >
+                    Удалить
+                  </Button>
+                </Col>
               </Row>
             </div>
             <br />
@@ -208,47 +230,46 @@ const CreateTask = () => {
         <Button
           variant="primary"
           type="submit"
-          onClick={(e) =>
-            {
-              console.log(forms);
-              setForms([
-                ...forms,
-                {
-                  resource: materials[0].name,
-                  quantity: "",
-                  measurement: materials[0].units,
-                },
-              ]);
-              console.log(forms);
-            }
+          onClick={() =>
+            setForms((prevForms) => [
+              ...prevForms,
+              {
+                resource: materials[0]?.name,
+                quantity: "",
+                measurement: materials[0]?.units,
+              },
+            ])
           }
         >
           + Добавить ресурс
         </Button>
         <br />
-        <Form flexDirection="column" onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formComment">
-            <Form.Label>Комментарий к заявке</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Комментарий"
-              // Пример обработчика изменения введенного текста
-              onChange={(e) => handleInputChangeCommentary(e.target.value)}
-            />
-          </Form.Group>
-        </Form>
+        <Form.Group className="mb-3" controlId="formComment">
+          <Form.Label>Комментарий к заявке</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Комментарий"
+            onChange={(e) => handleInputChangeCommentary(e.target.value)}
+          />
+        </Form.Group>
         <br />
         <Form flexDirection="column" onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formComment">
-            <Form.Label>Адрес доставки</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Адрес"
-              // Пример обработчика изменения введенного текста
-              onChange={(e) => handleInputChangeAddress(e.target.value)}
-            />
+            <Form.Label>Дата доставки</Form.Label>
+            <br></br>
+            <input type="date" onChange={(e) => setDate(e.target.value)}>
+            </input>
           </Form.Group>
         </Form>
+        <br/>
+        <Form.Group className="mb-3" controlId="formComment">
+          <Form.Label>Адрес доставки</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Адрес"
+            onChange={(e) => handleInputChangeAddress(e.target.value)}
+          />
+        </Form.Group>
         <br />
         <Button variant="success" type="submit" onClick={handleSubmit}>
           Подтвердить заявку
