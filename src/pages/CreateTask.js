@@ -262,6 +262,15 @@ const CreateTask = () => {
           </Form.Group>
         </Form>
         <br/>
+        <Form flexDirection="column" onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="formComment">
+            <Form.Label>Дата доставки</Form.Label>
+            <br></br>
+            <input type="date" onChange={(e) => setDate(e.target.value)}>
+            </input>
+          </Form.Group>
+        </Form>
+        <br/>
         <Form.Group className="mb-3" controlId="formComment">
           <Form.Label>Адрес доставки</Form.Label>
           <Form.Control
