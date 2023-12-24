@@ -7,6 +7,7 @@ export default function CreateMaterials() {
 
   const [materials, setMaterials] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [unitsList, setUnitsList] = useState([]);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [units, setUnits] = useState("");
@@ -19,6 +20,9 @@ export default function CreateMaterials() {
 
         if (response.ok) {
           setMaterials(data);
+          for (var i = 0; i < data.length; i++){
+            if (!unitsList.includes(data[i].units)) setUnitsList(unitsList, unitsList.push(data[i].units))
+          }
         } else {
           console.error("Ошибка при получении материалов");
         }
@@ -28,6 +32,7 @@ export default function CreateMaterials() {
 
         if (response.ok) {
             setCategories(data);
+            //setCategory(data[0].id_)
           } else {
             console.error("Ошибка при получении категорий");
           }
@@ -39,8 +44,8 @@ export default function CreateMaterials() {
     fetchMaterials();
   }, []);
 
-  const handleSubmit = () => {
-
+  const handleSubmit = async (event) => {
+    event.preventDefault();
   }
 
   const handleInputChangeName = (value) => {
@@ -48,13 +53,17 @@ export default function CreateMaterials() {
   }
 
   const handleInputChangeCategory = (value) => {
-    setCategory(value)
+    var e = "";
+    for (var i = 0 ; i < categories.length; i++){
+        if (categories[i].name === value) e = categories[i].id_
+    }
+    console.log(e);
+    setCategory(e)
   }
 
   const handleInputChangeUnits = (value) => {
     setUnits(value)
   }
-
 
   if (localStorage.getItem('jwt') === null) return (
     <>
@@ -88,24 +97,34 @@ export default function CreateMaterials() {
 
           <Form.Group className="mb-3" controlId="formBasicCategory">
             <Form.Label>Категория</Form.Label>
-            <Form.Control
-              type=""
-              placeholder="Введите категорию материла (сыпучие материалы, СИЗ...)"
-              onChange={(e) => {
+                <Form.Select aria-label="Default select example" onChange={(e) => {
                 handleInputChangeCategory(e.target.value);
-              }}
-            />
+              }}>     
+                     <option>
+                        Выберите категорию из списка
+                     </option>
+                      {categories.map((item, index) => (
+                        <option key={index} value={item.value}>
+                          {item.name}
+                        </option>
+                      ))}
+                </Form.Select>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicUnits">
             <Form.Label>Единицы измерения</Form.Label>
-            <Form.Control
-              type=""
-              placeholder="Введите единицы измерения материала"
-              onChange={(e) => {
-                handleInputChangeUnits(e.target.value);
-              }}
-            />
+                <Form.Select aria-label="Default select example" onChange={(e) => {
+                    handleInputChangeUnits(e.target.value);
+                    }}>     
+                     <option>
+                        Выберите единицы измерения из списка
+                     </option>
+                      {unitsList.map((item, index) => (
+                        <option key={index} value={item.value}>
+                          {item}
+                        </option>
+                      ))}
+                </Form.Select>
           </Form.Group>
           <br></br>
           <div style={{ display: "flex", justifyContent: "center" }}>
