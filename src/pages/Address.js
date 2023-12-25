@@ -3,7 +3,7 @@ import { Button, Form, Stack, Col, Row } from "react-bootstrap";
 import { API_SERVER } from "../serverAddresses";
 import "../style.css"
 
-export default function Materials() {
+export default function Address() {
 
 
 
@@ -19,7 +19,7 @@ export default function Materials() {
 
   return (
     <>
-        <h1>Материалы</h1>
+        <h1>Работа с адресами</h1>
         <div style={{ display: "flex", justifyContent: "center", backgroundColor: "lightblue",
           width: "50%",
           margin: "auto",
@@ -28,13 +28,10 @@ export default function Materials() {
         <Form flexDirection="column">
           <br></br>
           <div style={{ display: "flex", justifyContent: "center", gap: "10px", flexDirection: "column" }}>
-            <Button variant="warning" type="submit" href="/Materials/Edit" style={{width: "33%", alignSelf: "center"}}>
-              Редактировать
-            </Button>
-            <Button variant="success" type="submit" href="/Materials/Create" style={{width: "33%", alignSelf: "center"}}>
+            <Button variant="success" type="submit" href="/Address/Create" style={{width: "33%", alignSelf: "center"}}>
               Создать
             </Button>
-            <Button variant="danger" type="submit" href="/Materials/Delete" style={{width: "33%", alignSelf: "center"}}>
+            <Button variant="danger" type="submit" href="/Address/Delete" style={{width: "33%", alignSelf: "center"}}>
               Удалить
             </Button>
           </div>

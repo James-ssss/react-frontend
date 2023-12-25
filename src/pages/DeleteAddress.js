@@ -3,7 +3,7 @@ import { Button, Form, Stack, Col, Row } from "react-bootstrap";
 import { API_SERVER } from "../serverAddresses";
 import "../style.css"
 
-export default function Materials() {
+export default function DeleteAddress() {
 
 
 

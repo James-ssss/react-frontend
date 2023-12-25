@@ -27,6 +27,7 @@ export default function NaviBar() {
                 <NavLink as={Link} to="/Tasks" className={location.pathname === '/Tasks' ? 'active' : ''}>Посмотреть заявки</NavLink>
                 <NavLink as={Link} to="/Materials" className={location.pathname === '/Materials' ? 'active' : ''}>Материалы</NavLink>
                 <NavLink as={Link} to="/Users" className={location.pathname === '/Users' ? 'active' : ''}>Пользователи</NavLink>
+                <NavLink as={Link} to="/Address" className={location.pathname === '/Address' ? 'active' : ''}>Адреса</NavLink>
               </>
             )}
           </Nav>

@@ -7,6 +7,7 @@ const CreateTask = () => {
   const navigate = useNavigate();
 
   const [materials, setMaterials] = useState([]);
+  const [addressess, setAddressess] = useState([]);
   const [forms, setForms] = useState([
     {
       resource: "",
@@ -15,15 +16,15 @@ const CreateTask = () => {
     },
   ]);
   const [comment, setComment] = useState("");
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState("Выберите адрес");
   const [date, setDate] = useState("");
   const jwtToken = localStorage.getItem("jwt");
 
   useEffect(() => {
     const fetchMaterials = async () => {
       try {
-        const response = await fetch(`${API_SERVER}/material/all`);
-        const data = await response.json();
+        var response = await fetch(`${API_SERVER}/material/all`);
+        var data = await response.json();
 
         if (response.ok) {
           setMaterials(data);
@@ -35,6 +36,13 @@ const CreateTask = () => {
           });
         } else {
           console.error("Ошибка при получении материалов");
+        }
+        response = await fetch(`${API_SERVER}/address`);
+        data = await response.json();
+        if (response.ok) {
+          setAddressess(data);
+        } else {
+          console.error("Ошибка при получении адресов");
         }
       } catch (error) {
         console.error("Ошибка при получении материалов", error);

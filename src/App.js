@@ -14,6 +14,9 @@ import EditMaterials from './pages/EditMaterials';
 import DeleteMaterials from './pages/DeleteMaterials';
 import Users from './pages/Users';
 import EditUser from './pages/EditUser';
+import Address from './pages/Address';
+import CreateAddress from './pages/CreateAddress';
+import DeleteAddress from './pages/DeleteAddress';
 function App() {
   return (
     <>
@@ -32,6 +35,9 @@ function App() {
       <Route path='/Materials/Edit' Component={EditMaterials}/>
       <Route path='/Materials/Delete' Component={DeleteMaterials}/>
       <Route path='/Users' Component={Users}/>
+      <Route path='/Address' Component={Address}/>
+      <Route path='/Address/Create' Component={CreateAddress}/>
+      <Route path='/Address/Delete' Component={DeleteAddress}/>
     </Routes>
     </Router>
     
