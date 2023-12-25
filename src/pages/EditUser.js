@@ -76,29 +76,34 @@ export default function EditUser() {
         }
       }
 
-    const tryBanUser = async () => {
+    const tryActUser = async (act) => {
+        var link = `${API_SERVER}/user/${act}/${user.id_}`;
+        var request = "POST";
+        if (act === "delete"){
+            link = `${API_SERVER}/user/${user.id_}`
+            request = "DELETE";
+        }
         try {
-            const response = await fetch(`${API_SERVER}/user/ban/${user.id_}`, {
-              method: "POST",
+            const response = await fetch(link, {
+              method: request,
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${jwtToken}`, 
             },
-              body: JSON.stringify(bodyData),
             });
     
             if (response.ok) {
-              alert("Пользтователь успешно забанен!")
+              alert("Операция успешна!")
             } else {
-              alert("Ошибка при бане пользователя")
+              alert("Ошибка при выполнении операции")
             }
           } catch (error) {
-            alert("Ошибка при бане пользователя")
+            alert("Ошибка при выполнении операции")
             console.error("Произошла ошибка", error);
           }
     }
 
-    const banUser = (event) => {
+    const processUser = (event, act) => {
         event.preventDefault();
         if (user.id_ === undefined){
             alert("Пользователь не выбран")
@@ -106,19 +111,11 @@ export default function EditUser() {
         }
         else{
             if (user.is_superuser === true){
-                alert("Этого пользователя нельзя забанить");
+                alert("Данное действие с этим пользователем запрещено");
                 return;
             }
-            tryBanUser();
+            tryActUser(act);
         }
-    }
-
-    const unbanUser = () => {
-        
-    }
-
-    const deleteUser = () => {
-        
     }
 
 
@@ -180,13 +177,13 @@ export default function EditUser() {
                         <p style={{textAlign: "center"}}>{user.last_login}</p>
                       </div>
             </Form.Group>
-            <Button variant="danger" type="submit" onClick={(event) => banUser(event)} style={{width: "33%", alignSelf: "center"}}>
+            <Button variant="danger" type="submit" onClick={(event) => processUser(event, "ban")} style={{width: "33%", alignSelf: "center"}}>
               Забанить пользователя
             </Button>
-            <Button variant="danger" type="submit" onClick={unbanUser} style={{width: "33%", alignSelf: "center"}}>
+            <Button variant="danger" type="submit" onClick={(event) => processUser(event, "unban")} style={{width: "33%", alignSelf: "center"}}>
               Разбанить пользователя
             </Button>   
-            <Button variant="danger" type="submit" onClick={deleteUser} style={{width: "33%", alignSelf: "center"}}>
+            <Button variant="danger" type="submit" onClick={(event) => processUser(event, "delete")} style={{width: "33%", alignSelf: "center"}}>
               Удалить пользователя
             </Button>
           </div>

@@ -51,11 +51,15 @@ export default function CreateUser() {
   
     const handleSubmit = async (event) => {
       event.preventDefault();
-      if (email && pass && is_staff && phone && name && surname!== ""){
+      if (is_staff === ""){
+        alert("Не выбрана роль")
+        return;
+      }
+      if (email && pass && phone && name && surname!== ""){
         console.log(email, pass, is_staff)
         const bodyData = {
             email: email,
-            is_superuser: false,
+            is_superuser: true,
             first_name: name,
             last_name: surname,
             second_name: second_name,
@@ -85,6 +89,7 @@ export default function CreateUser() {
           }
       }
       else alert("Форма заполнена не полностью");
+      console.log(email, pass, is_staff, surname, phone, is_staff)
     };
 
   if (localStorage.getItem('jwt') === null) return (
