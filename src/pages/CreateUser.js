@@ -8,12 +8,25 @@ export default function CreateUser() {
 
     const [email, setEmail] = useState("");
 
+    const [phone, setPhone] = useState("");
+
     const [pass, setPass] = useState("");
 
     const [is_staff, setRole] = useState("");
+
+    const [name, setName] = useState("");
+
+    const [second_name, setSecondName] = useState("");
+
+    const [surname, setSurname] = useState("");
+  
   
     const handleInputChangeEmail = (value) => {
       setEmail(value);
+    };
+
+    const handleInputChangePhone = (value) => {
+      setPhone(value);
     };
   
     const handleInputChangePass = (value) => {
@@ -23,6 +36,18 @@ export default function CreateUser() {
     const handleInputChangeRole = (value) => {
         setRole(value);
       };
+
+    const handleInputChangeFirstName = (value) => {
+        setName(value);
+      };
+    
+    const handleInputChangeSecondName = (value) => {
+        setSecondName(value);
+      };
+  
+    const handleInputChangeSurname = (value) => {
+          setSurname(value);
+        };
   
     const handleSubmit = async (event) => {
       event.preventDefault();
@@ -30,13 +55,14 @@ export default function CreateUser() {
         console.log(email, pass, is_staff)
         const bodyData = {
             email: email,
-            is_superuser: "",
-            first_name: "",
-            last_name: "",
-            second_name: "",
+            is_superuser: false,
+            first_name: name,
+            last_name: surname,
+            second_name: second_name,
             is_active: "",
             password: pass,
-            is_staff: is_staff
+            is_staff: is_staff,
+            phone: phone,
           };
     
           try {
@@ -80,6 +106,50 @@ export default function CreateUser() {
           padding: "15px",
           flexDirection: "column" }}>
         <Form flexDirection="column" onSubmit={handleSubmit}>
+        <Form.Group className="mb-3" controlId="formBasicFirstName">
+            <Form.Label>Фамилия</Form.Label>
+            <Form.Control
+              type=""
+              placeholder="Введите фамилию"
+              onChange={(e) => {
+                handleInputChangeSurname(e.target.value);
+              }}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formSecondName">
+            <Form.Label>Имя</Form.Label>
+            <Form.Control
+              type=""
+              placeholder="Введите имя"
+              onChange={(e) => {
+                handleInputChangeFirstName(e.target.value);
+              }}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicSurname">
+            <Form.Label>Отчество</Form.Label>
+            <Form.Control
+              type=""
+              placeholder="Введите отчество (если есть)"
+              onChange={(e) => {
+                handleInputChangeSecondName(e.target.value);
+              }}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicSurname">
+            <Form.Label>Телефон</Form.Label>
+            <Form.Control
+              type=""
+              placeholder="Введите номер телефона"
+              onChange={(e) => {
+                handleInputChangePhone(e.target.value);
+              }}
+            />
+          </Form.Group>
+
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Почта</Form.Label>
             <Form.Control
