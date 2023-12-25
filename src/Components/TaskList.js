@@ -34,7 +34,7 @@ const TaskList = () => {
 
   const handleRowClick = (orderId) => {
     // Navigate to the detailed view for the selected order
-    navigate(`/order/${orderId}`);  // Use navigate instead of history.push
+    navigate(`/Orders/${orderId}`);  // Use navigate instead of history.push
   };
 
   return (
@@ -45,7 +45,7 @@ const TaskList = () => {
           <th>Дата отправки</th>
           <th>Адрес доставки</th>
           <th>Отправитель</th>
-          <th>Время прошло</th>
+          <th>Времени прошло</th>
           <th>Статус</th>
           <th>Действие</th>
         </tr>

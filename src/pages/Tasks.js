@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Button, Collapse } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import TaskList from "../Components/TaskList";
 import "../style.css"
-import ApplicationList from "../Components/TaskList2";
 
 export default function Tasks() {
   const [open, setOpen] = useState(false);

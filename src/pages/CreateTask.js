@@ -83,48 +83,53 @@ const CreateTask = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (address === "") {
-      alert("Адрес не указан");
-      return;
+    var flag = true;
+    if (address === ""){
+        alert("Адрес не указан");
+        return;
     }
-
-    const isFormsValid = forms.every(
-      (form) => form.quantity.trim() !== "" && form.resource.trim() !== ""
-    );
-
-    if (!isFormsValid) {
-      alert("Одна из форм не заполнена полностью");
+    if (date === ""){
+      alert("Дата не указана");
       return;
-    }
-
-    var resources = getResources();
+  }
+    forms.forEach((form, index) => {
+        if (forms[index].quantity && forms[index].resource !== ""){
+        }
+        else{
+            flag=false;
+            console.log(index, forms[index].resource, forms[index].quantity);
+        }
+      });
+    if (flag){
+      var resources = getResources();
       const bodyData = {
-        resources: resources,
+        forms: resources,
         comment: comment,
         address: address,
-        date_selected: date, 
+        date_selected: date + " 00:00:00", 
       };
-
-      console.log(bodyData)
-      console.log(forms)
+      console.log(bodyData);
       try {
-      const response = await fetch(`${API_SERVER}/order/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`, 
+        const response = await fetch(`${API_SERVER}/order`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwtToken}`, 
         },
-        body: JSON.stringify(bodyData),
-      });
+          body: JSON.stringify(bodyData),
+        });
 
-      if (response.ok) {
-        console.log("Заявка успешно создана!");
-      } else {
-        console.error("Ошибка при создании заявки");
+        if (response.ok) {
+          console.log("Заявка успешно создана!");
+        } else {
+          console.error("Ошибка при создании заявки");
+        }
+      } 
+      catch (error) {
+        console.error("Произошла ошибка", error);
       }
-    } catch (error) {
-      console.error("Произошла ошибка", error);
     }
+    else alert("Одна из форм не заполнена полностью");
   };
 
   const handleDelete = (index) => {

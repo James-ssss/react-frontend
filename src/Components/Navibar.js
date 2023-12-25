@@ -23,10 +23,10 @@ export default function NaviBar() {
           <Nav className="me-auto">
             {isLoggedIn && (
               <>
-                <NavLink as={Link} to="/CreateTask" className={location.pathname === '/CreateTask' ? 'active' : ''}>Создать новую заявку</NavLink>
-                <NavLink as={Link} to="/Tasks" className={location.pathname === '/Tasks' ? 'active' : ''}>Посмотреть заявки</NavLink>
-                <NavLink as={Link} to="/Materials" className={location.pathname === '/Materials' ? 'active' : ''}>Материалы</NavLink>
-                <NavLink as={Link} to="/Users" className={location.pathname === '/Users' ? 'active' : ''}>Пользователи</NavLink>
+                <NavLink as={Link} to="/createTask" className={location.pathname === '/createTask' ? 'active' : ''}>Создать новую заявку</NavLink>
+                <NavLink as={Link} to="/orders" className={location.pathname === '/orders' ? 'active' : ''}>Посмотреть заявки</NavLink>
+                <NavLink as={Link} to="/materials" className={location.pathname === '/materials' ? 'active' : ''}>Материалы</NavLink>
+                <NavLink as={Link} to="/users" className={location.pathname === '/users' ? 'active' : ''}>Пользователи</NavLink>
                 <NavLink as={Link} to="/Address" className={location.pathname === '/Address' ? 'active' : ''}>Адреса</NavLink>
               </>
             )}
@@ -35,7 +35,7 @@ export default function NaviBar() {
             {isLoggedIn ? (
               <Button variant="primary" as={Link} to="/" onClick={handleLogout}>Выйти</Button>
             ) : (
-              <Button variant="primary" as={Link} to="/Login">Вход</Button>
+              <Button variant="primary" as={Link} to="/login">Вход</Button>
             )}
           </Nav>
         </Navbar.Collapse>

@@ -1,6 +1,5 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button } from 'react-bootstrap';
 import NaviBar from './Components/Navibar';
 import { Route, BrowserRouter as Router, Link, Routes} from 'react-router-dom';
 
@@ -17,6 +16,7 @@ import EditUser from './pages/EditUser';
 import Address from './pages/Address';
 import CreateAddress from './pages/CreateAddress';
 import DeleteAddress from './pages/DeleteAddress';
+import OrderDetail from './pages/OrderDetail';
 function App() {
   return (
     <>
@@ -27,7 +27,7 @@ function App() {
       <Route path='/Login' Component={Login}/>
       <Route path='/' Component={Login}/>
       <Route path='/CreateUser' Component={CreateUser}/>
-      <Route path='/Tasks' Component={Tasks}/>
+      <Route path='/Orders' Component={Tasks}/>
       <Route path='/Materials' Component={Materials}/>
       <Route path='/Materials/Create' Component={CreateMaterials}/>
       <Route path='/Users/Create' Component={CreateUser}/>
@@ -38,10 +38,9 @@ function App() {
       <Route path='/Address' Component={Address}/>
       <Route path='/Address/Create' Component={CreateAddress}/>
       <Route path='/Address/Delete' Component={DeleteAddress}/>
+      <Route path='/Orders/:orderId' Component={OrderDetail}/>
     </Routes>
     </Router>
-    
-
     </>
   );
 }
