@@ -24,6 +24,7 @@ function App() {
       <Route path='/CreateUser' Component={CreateUser}/>
       <Route path='/Tasks' Component={Tasks}/>
       <Route path='/Materials' Component={Materials}/>
+      <Route path='/Materials/Create' Component={CreateMaterials}/>
       <Route path='/Users/Create' Component={CreateUser}/>
       <Route path='/Materials/Edit' Component={EditMaterials}/>
       <Route path='/Materials/Delete' Component={DeleteMaterials}/>

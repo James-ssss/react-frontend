@@ -14,6 +14,9 @@ export default function EditMaterials() {
     const [category, setCategory] = useState("");
     const [categoryString, setCategoryString] = useState("");
     const [units, setUnits] = useState("");
+    const [oldname, setOldName] = useState("Материал не выбран");
+    const [oldcategory, setOldCategory] = useState("Материал не выбран");
+    const [oldunits, setOldUnits] = useState("Материал не выбран");
 
   useEffect(() => {
     const fetchMaterials = async () => {
@@ -100,9 +103,22 @@ export default function EditMaterials() {
   const handleInputChangeId = (value) => {
     var e = "";
     for (var i = 0; i < materials.length; i++) {
-        if (materials[i].name === value) e = materials[i].id_;
+        if (materials[i].name === value) e = materials[i];
       }
-    setId(e);
+    if (e === ""){
+        setOldName("Материал не выбран");
+        setOldCategory("Материал не выбран");
+        setOldUnits("Материал не выбран");
+    }
+    else{
+        setId(e.id_);
+        setOldName(e.name);
+        setOldCategory(e.category_id);
+        setOldUnits(e.units);
+        setName(e.name);
+        setCategory(e.category_id);
+        setUnits(e.units);
+    } 
   };
 
   const handleInputChangeCategory = (value) => {
@@ -166,6 +182,21 @@ export default function EditMaterials() {
                       ))}
                     </Form.Select>
             </Form.Group>
+            <div style={{flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+                <h4 style={{textAlign: "center"}}>
+                    Название
+                </h4>
+                <p style={{textAlign: "center"}}>{oldname}</p>
+                <h4 style={{textAlign: "center"}}>
+                    Категория
+                </h4>
+                <p style={{textAlign: "center"}}>{oldcategory}</p>
+                <h4 style={{textAlign: "center"}}>
+                    Единицы измерения
+                </h4>
+                <p style={{textAlign: "center"}}>{oldunits}</p>
+                <h4>Заполните новые данные ниже</h4>
+              </div>
             <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Название</Form.Label>
             <Form.Control
