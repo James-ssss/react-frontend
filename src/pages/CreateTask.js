@@ -17,6 +17,7 @@ const CreateTask = () => {
   const [comment, setComment] = useState("");
   const [address, setAddress] = useState("");
   const [date, setDate] = useState("");
+  const jwtToken = localStorage.getItem("jwt");
 
   useEffect(() => {
     const fetchMaterials = async () => {
@@ -103,6 +104,7 @@ const CreateTask = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`, 
         },
         body: JSON.stringify(bodyData),
       });

@@ -10,6 +10,7 @@ export default function CreateMaterials() {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [units, setUnits] = useState("");
+  const jwtToken = localStorage.getItem("jwt");
 
   useEffect(() => {
     const fetchMaterials = async () => {
@@ -69,6 +70,7 @@ export default function CreateMaterials() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${jwtToken}`, 
           },
           body: JSON.stringify({
             category_id: category,

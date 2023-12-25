@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 export default function CreateUser() {
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+
+    const jwtToken = localStorage.getItem("jwt");
 
     const [email, setEmail] = useState("");
 
@@ -70,6 +72,7 @@ export default function CreateUser() {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${jwtToken}`, 
             },
               body: JSON.stringify(bodyData),
             });

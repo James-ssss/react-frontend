@@ -5,6 +5,8 @@ import "../style.css"
 
 export default function DeleteMaterials() {
 
+    const jwtToken = localStorage.getItem("jwt");
+
     const [materials, setMaterials] = useState([]);
 
     const [material_id, setMaterialId] = useState([]);
@@ -42,6 +44,7 @@ export default function DeleteMaterials() {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${jwtToken}`, 
             },
             body: JSON.stringify({
               material_id: material_id,

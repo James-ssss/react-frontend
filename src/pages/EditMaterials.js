@@ -5,14 +5,15 @@ import "../style.css"
 
 export default function EditMaterials() {
 
-  const [materials, setMaterials] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [unitsList, setUnitsList] = useState([]);
-  const [id_, setId] = useState("");
-  const [name, setName] = useState("");
-  const [category, setCategory] = useState("");
-  const [categoryString, setCategoryString] = useState("");
-  const [units, setUnits] = useState("");
+    const jwtToken = localStorage.getItem("jwt");
+    const [materials, setMaterials] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [unitsList, setUnitsList] = useState([]);
+    const [id_, setId] = useState("");
+    const [name, setName] = useState("");
+    const [category, setCategory] = useState("");
+    const [categoryString, setCategoryString] = useState("");
+    const [units, setUnits] = useState("");
 
   useEffect(() => {
     const fetchMaterials = async () => {
@@ -72,6 +73,7 @@ export default function EditMaterials() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${jwtToken}`, 
           },
           body: JSON.stringify({
             category_id: category,
