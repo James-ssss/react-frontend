@@ -43,8 +43,12 @@ const Login = () => {
         });
 
         if (response.ok) {
-          const { access_token } = await response.json();
+          const res = await response.json();
+          const access_token = res.access_token;
+          const role = res.user_role;
+
           localStorage.setItem("jwt", access_token);
+          localStorage.setItem("role", role);
           setLoggedIn(true); // Устанавливаем флаг в true после успешной авторизации
           navigate("/CreateTask");
         } else {

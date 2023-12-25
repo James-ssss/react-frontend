@@ -110,7 +110,7 @@ export default function EditUser() {
             return
         }
         else{
-            if (user.is_superuser === true){
+            if (user.is_superuser === true || (user.is_staff === true && localStorage.getItem('role') === "STAFF")){
                 alert("Данное действие с этим пользователем запрещено");
                 return;
             }
@@ -119,7 +119,7 @@ export default function EditUser() {
     }
 
 
-  if (localStorage.getItem('jwt') === null) return (
+  if (localStorage.getItem('jwt') === null || localStorage.getItem('role') === "USER") return (
     <>
       <div style={{
                 backgroundColor: "red",

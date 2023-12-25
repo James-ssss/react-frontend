@@ -86,7 +86,7 @@ export default function DeleteMaterials() {
 
   
   
-    if (localStorage.getItem('jwt') === null) return (
+    if (localStorage.getItem('jwt') === null || localStorage.getItem('role') === "USER") return (
       <>
         <div style={{
                   backgroundColor: "red",

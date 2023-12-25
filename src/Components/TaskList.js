@@ -6,6 +6,7 @@ import { API_SERVER } from "../serverAddresses";
 const TaskList = () => {
   const [applications, setApplications] = useState([]);
   const jwtToken = localStorage.getItem("jwt");
+  const role = localStorage.getItem("role");
   const navigate = useNavigate();  // Use useNavigate instead of useHistory
 
   useEffect(() => {
@@ -36,6 +37,16 @@ const TaskList = () => {
     // Navigate to the detailed view for the selected order
     navigate(`/Orders/${orderId}`);  // Use navigate instead of history.push
   };
+
+  if (localStorage.getItem("jwt") === null || role === "USER") return (
+    <>
+    <div style={{
+              backgroundColor: "red",
+              padding: "10px",
+              borderRadius: "10px",
+            }}>Доступ запрещен</div>
+  </>
+  );
 
   return (
     <Table striped bordered>

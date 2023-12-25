@@ -59,7 +59,7 @@ export default function CreateUser() {
         console.log(email, pass, is_staff)
         const bodyData = {
             email: email,
-            is_superuser: true,
+            is_superuser: false,
             first_name: name,
             last_name: surname,
             second_name: second_name,
@@ -92,7 +92,7 @@ export default function CreateUser() {
       console.log(email, pass, is_staff, surname, phone, is_staff)
     };
 
-  if (localStorage.getItem('jwt') === null) return (
+  if (localStorage.getItem('jwt') === null || localStorage.getItem('role') === "USER") return (
     <>
       <div style={{
                 backgroundColor: "red",

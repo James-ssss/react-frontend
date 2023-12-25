@@ -114,7 +114,7 @@ export default function CreateMaterials() {
     setUnits(e);
   };
 
-  if (localStorage.getItem("jwt") === null)
+  if (localStorage.getItem("jwt") === null || localStorage.getItem("role") === "USER")
     return (
       <>
         <div

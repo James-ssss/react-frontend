@@ -4,17 +4,14 @@ import { API_SERVER } from "../serverAddresses";
 import "../style.css"
 
 export default function CreateAddress() {
-
-
-    const [name, setName] = useState("");
-
-    const handleInputChangeFirstName = (value) => {
-        setName(value);
-      };
+  const [city, setCity] = useState("");
+  const [street, setStreet] = useState("");
+  const [building, setBuilding] = useState("");
+  const [flat, setFlat] = useState("");
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-    
+
       };
 
   if (localStorage.getItem('jwt') === null) return (
@@ -45,7 +42,7 @@ export default function CreateAddress() {
               type=""
               placeholder="Введите город"
               onChange={(e) => {
-                handleInputChangeFirstName(e.target.value);
+                setCity(e.target.value);
               }}
             />
           </Form.Group>
@@ -55,7 +52,7 @@ export default function CreateAddress() {
               type=""
               placeholder="Введите улицу"
               onChange={(e) => {
-                handleInputChangeFirstName(e.target.value);
+                setStreet(e.target.value);
               }}
             />
           </Form.Group>
@@ -65,7 +62,7 @@ export default function CreateAddress() {
               type=""
               placeholder="Введите номер дома"
               onChange={(e) => {
-                handleInputChangeFirstName(e.target.value);
+                setBuilding(e.target.value);
               }}
             />
           </Form.Group>
@@ -74,7 +71,7 @@ export default function CreateAddress() {
               type=""
               placeholder="Введите номер квартиры"
               onChange={(e) => {
-                handleInputChangeFirstName(e.target.value);
+               setFlat(e.target.value);
               }}
             />
           </Form.Group>
