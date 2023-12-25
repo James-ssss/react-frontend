@@ -1,27 +1,41 @@
-import React from "react";
-import { Table } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Table, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";  // Import useNavigate instead of useHistory
+import { API_SERVER } from "../serverAddresses";
 
 const TaskList = () => {
-  // Пример данных заявок
-  const applications = [
-    {
-      id: 1,
-      date: "01.09.2021",
-      deliveryAddress: "ул. Пушкина, д.10",
-      sender: "Иванов Иван",
-      elapsedTime: "2 часа",
-      status: "В пути",
-    },
-    {
-      id: 2,
-      date: "02.09.2021",
-      deliveryAddress: "ул. Лермонтова, д.5",
-      sender: "Петров Петр",
-      elapsedTime: "1 день",
-      status: "Доставлено",
-    },
-    // ...другие заявки
-  ];
+  const [applications, setApplications] = useState([]);
+  const jwtToken = localStorage.getItem("jwt");
+  const navigate = useNavigate();  // Use useNavigate instead of useHistory
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${API_SERVER}/order/all`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
+
+        const data = await response.json();
+        setApplications(data);
+      } catch (error) {
+        console.error("Ошибка при получении данных:", error);
+      }
+    };
+
+    fetchData();
+  }, [jwtToken]);
+
+  if (!Array.isArray(applications)) {
+    console.error("Полученные данные не являются массивом:", applications);
+    return null;
+  }
+
+  const handleRowClick = (orderId) => {
+    // Navigate to the detailed view for the selected order
+    navigate(`/order/${orderId}`);  // Use navigate instead of history.push
+  };
 
   return (
     <Table striped bordered>
@@ -33,21 +47,55 @@ const TaskList = () => {
           <th>Отправитель</th>
           <th>Время прошло</th>
           <th>Статус</th>
+          <th>Действие</th>
         </tr>
       </thead>
       <tbody>
         {applications.map((application) => (
-          <tr key={application.id}>
-            <td>{application.id}</td>
-            <td>{application.date}</td>
-            <td>{application.deliveryAddress}</td>
-            <td>{application.sender}</td>
-            <td>{application.elapsedTime}</td>
-            <td>{application.status}</td>
+          <tr key={application.id_}>
+            <td>{application.id_}</td>
+            <td>{application.date_creation}</td>
+            <td>{application.address}</td>
+            <td>{application.comment}</td>
+            <td>{calculateElapsedTime(application.date_creation)}</td>
+            <td>{getStatusText(application.status_id)}</td>
+            <td>
+              <Button
+                variant="primary"
+                onClick={() => handleRowClick(application.id_)}
+              >
+                Подробнее
+              </Button>
+            </td>
           </tr>
         ))}
       </tbody>
     </Table>
   );
 };
+
+const calculateElapsedTime = (creationDate) => {
+  const currentDate = new Date();
+  const diffInMilliseconds = currentDate - new Date(creationDate);
+  const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
+
+  const hours = Math.floor(diffInSeconds / 3600);
+  const minutes = Math.floor((diffInSeconds % 3600) / 60);
+
+  return `${hours} часов ${minutes} минут`;
+};
+
+const getStatusText = (statusId) => {
+  switch (statusId) {
+    case 1:
+      return "ПРИНЯТО";
+    case 2:
+      return "ВЫПОЛНЕНО";
+    case 3:
+      return "ПРОСРОЧЕНО";
+    default:
+      return "Неизвестный статус";
+  }
+};
+
 export default TaskList;

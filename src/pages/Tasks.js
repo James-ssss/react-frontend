@@ -12,28 +12,6 @@ export default function Tasks() {
   const navigate = useNavigate();
 
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await fetch("http://127.0.0.1:5000/orders", {
-          method: "GET",
-        });
-
-        if (!response.ok) {
-          console.error("Ошибка при получении данных");
-          return;
-        }
-
-        const data = await response.json();
-        setTasks(data);
-      } catch (error) {
-        console.error("Произошла ошибка", error);
-      }
-    };
-
-    fetchTasks();
-  }, []);
-
   if (localStorage.getItem('jwt') === null) return (
     <>
       <div style={{
@@ -47,7 +25,7 @@ export default function Tasks() {
   return (
     <>
       <h1>Заявки</h1>
-      <ApplicationList/>
+      <TaskList/>
     </>
   );
 }
