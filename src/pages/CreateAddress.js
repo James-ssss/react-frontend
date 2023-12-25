@@ -4,14 +4,44 @@ import { API_SERVER } from "../serverAddresses";
 import "../style.css"
 
 export default function CreateAddress() {
+
+  const jwtToken = localStorage.getItem("jwt");
   const [city, setCity] = useState("");
   const [street, setStreet] = useState("");
   const [building, setBuilding] = useState("");
   const [flat, setFlat] = useState("");
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
-
+      event.preventDefault();
+      if (city === "" && street === "" && building === "")
+        {
+          alert("Не все поля заполнены")
+          return;
+        }
+      try{
+        var bodyData = {
+          flat: flat,
+          building: building,
+          city: city,
+          street: street,
+        }
+        const response = await fetch(`${API_SERVER}/address/create`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwtToken}`, 
+        },
+        body: JSON.stringify(bodyData),
+        });
+        if (response.ok) {
+          alert("Адрес создан")
+        } else {
+          alert("Ошибка при создании адреса");
+        }
+      } 
+      catch (error) {
+        console.error("Ошибка при создании адреса", error);
+      }
       };
 
   if (localStorage.getItem('jwt') === null) return (
@@ -77,7 +107,7 @@ export default function CreateAddress() {
           </Form.Group>
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <Button variant="success" type="submit" onSubmit={handleSubmit}>
+            <Button variant="success" type="submit" onClick={handleSubmit}>
               Создать
             </Button>
           </div>

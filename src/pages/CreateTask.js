@@ -37,7 +37,12 @@ const CreateTask = () => {
         } else {
           console.error("Ошибка при получении материалов");
         }
-        response = await fetch(`${API_SERVER}/address`);
+        response = await fetch(`${API_SERVER}/address`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwtToken}`, 
+        },
+        });
         data = await response.json();
         if (response.ok) {
           setAddressess(data);
@@ -120,9 +125,9 @@ const CreateTask = () => {
         });
 
         if (response.ok) {
-          console.log("Заявка успешно создана!");
+          alert("Заявка успешно создана!");
         } else {
-          console.error("Ошибка при создании заявки");
+          alert("Ошибка при создании заявки");
         }
       } 
       catch (error) {
@@ -279,11 +284,17 @@ const CreateTask = () => {
         <br/>
         <Form.Group className="mb-3" controlId="formComment">
           <Form.Label>Адрес доставки</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Адрес"
-            onChange={(e) => handleInputChangeAddress(e.target.value)}
-          />
+          <Form.Select
+                        aria-label="Default select example" onChange={(e) => handleInputChangeAddress(e.target.value)}>
+                          <option>
+                              Выберите адрес из списка
+                          </option>
+                        {addressess.map((item, ind) => (
+                          <option key={ind} value={item.name}>
+                            {item.city + " " + item.street + " " + item.building + " " + item.flat}
+                          </option>
+                        ))}
+          </Form.Select>
         </Form.Group>
         <br />
         <Button variant="success" type="submit" onClick={handleSubmit}>

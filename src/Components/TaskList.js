@@ -38,7 +38,7 @@ const TaskList = () => {
     navigate(`/Orders/${orderId}`);  // Use navigate instead of history.push
   };
 
-  if (localStorage.getItem("jwt") === null || role === "USER") return (
+  if (localStorage.getItem("jwt") === null || role === "USER")return (
     <>
     <div style={{
               backgroundColor: "red",
@@ -55,7 +55,7 @@ const TaskList = () => {
           <th>Номер</th>
           <th>Дата отправки</th>
           <th>Адрес доставки</th>
-          <th>Отправитель</th>
+          <th>Комментарий</th>
           <th>Времени прошло</th>
           <th>Статус</th>
           <th>Действие</th>

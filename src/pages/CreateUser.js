@@ -78,11 +78,11 @@ export default function CreateUser() {
               body: JSON.stringify(bodyData),
             });
     
-            if (response.ok) {
-              alert("Пользтователь успешно создан!")
-            } else {
-              alert("Ошибка при создании пользователя")
-            }
+            //if (response.status_code === "200") {
+              //alert("Пользтователь успешно создан!")
+            //} else {
+              //alert("Ошибка при создании пользователя")
+            //}
           } catch (error) {
             alert("Ошибка при создании пользователя")
             console.error("Произошла ошибка", error);

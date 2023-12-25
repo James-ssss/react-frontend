@@ -173,8 +173,6 @@ export default function EditUser() {
                         <p style={{textAlign: "center"}}>{user.email}</p>
                         <h4 style={{textAlign: "center"}}>Cоздан</h4>
                         <p style={{textAlign: "center"}}>{user.date_joined}</p>
-                        <h4 style={{textAlign: "center"}}>Последний вход в систему</h4>
-                        <p style={{textAlign: "center"}}>{user.last_login}</p>
                       </div>
             </Form.Group>
             <Button variant="danger" type="submit" onClick={(event) => processUser(event, "ban")} style={{width: "33%", alignSelf: "center"}}>
