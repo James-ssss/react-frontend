@@ -3,7 +3,7 @@ import { Button, Form, Stack, Col, Row } from "react-bootstrap";
 import { API_SERVER } from "../serverAddresses";
 import "../style.css"
 
-export default function Materials() {
+export default function Users() {
 
 
 
@@ -28,14 +28,11 @@ export default function Materials() {
         <Form flexDirection="column">
           <br></br>
           <div style={{ display: "flex", justifyContent: "center", gap: "10px", flexDirection: "column" }}>
-            <Button variant="success" type="submit" href="/Materials/Edit" style={{width: "33%", alignSelf: "center"}}>
-              Редактировать
+            <Button variant="success" type="submit" href="/Users/Create" style={{width: "33%", alignSelf: "center"}}>
+              Создать пользователя
             </Button>
-            <Button variant="success" type="submit" href="/Materials/Create" style={{width: "33%", alignSelf: "center"}}>
-              Создать
-            </Button>
-            <Button variant="success" type="submit" href="/Materials/Delete" style={{width: "33%", alignSelf: "center"}}>
-              Удалить
+            <Button variant="success" type="submit" href="/Users/Edit" style={{width: "33%", alignSelf: "center"}}>
+              Изменить права пользователя
             </Button>
           </div>
           <br></br>

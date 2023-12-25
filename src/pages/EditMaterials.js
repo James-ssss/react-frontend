@@ -48,11 +48,13 @@ export default function EditMaterials() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const mat = null;
+    var mat = "";
+    console.log(materials)
+    console.log(id_)
     for (var i = 0; i < materials.length; i++){
         if (materials[i].id_ === id_) mat = materials[i]
     }
-    if (mat === null){
+    if (mat === ""){
         alert("Что-то пошло не так, попробуйте позже")
         return
     }
@@ -98,7 +100,7 @@ export default function EditMaterials() {
     for (var i = 0; i < materials.length; i++) {
         if (materials[i].name === value) e = materials[i].id_;
       }
-    setId(value);
+    setId(e);
   };
 
   const handleInputChangeCategory = (value) => {

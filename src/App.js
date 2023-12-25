@@ -11,6 +11,8 @@ import CreateUser from './pages/CreateUser';
 import Materials from './pages/Materials';
 import CreateMaterials from './pages/CreateMaterials';
 import EditMaterials from './pages/EditMaterials';
+import DeleteMaterials from './pages/DeleteMaterials';
+import Users from './pages/Users';
 function App() {
   return (
     <>
@@ -22,8 +24,10 @@ function App() {
       <Route path='/CreateUser' Component={CreateUser}/>
       <Route path='/Tasks' Component={Tasks}/>
       <Route path='/Materials' Component={Materials}/>
-      <Route path='/Materials/Create' Component={CreateMaterials}/>
+      <Route path='/Users/Create' Component={CreateUser}/>
       <Route path='/Materials/Edit' Component={EditMaterials}/>
+      <Route path='/Materials/Delete' Component={DeleteMaterials}/>
+      <Route path='/Users' Component={Users}/>
     </Routes>
     </Router>
     
