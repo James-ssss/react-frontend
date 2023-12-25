@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { API_SERVER } from "../serverAddresses";
 
 export default function CreateUser() {
-
-    const navigate = useNavigate();
 
     const jwtToken = localStorage.getItem("jwt");
 
@@ -53,7 +51,7 @@ export default function CreateUser() {
   
     const handleSubmit = async (event) => {
       event.preventDefault();
-      if (email && pass && is_staff !== ""){
+      if (email && pass && is_staff && phone && name && surname!== ""){
         console.log(email, pass, is_staff)
         const bodyData = {
             email: email,
@@ -61,14 +59,13 @@ export default function CreateUser() {
             first_name: name,
             last_name: surname,
             second_name: second_name,
-            is_active: "",
             password: pass,
             is_staff: is_staff,
-            phone: phone,
+            phone_number: phone,
           };
     
           try {
-            const response = await fetch("http://127.0.0.1:5000/user/create", {
+            const response = await fetch(`${API_SERVER}/user/create`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -78,15 +75,16 @@ export default function CreateUser() {
             });
     
             if (response.ok) {
-              console.log("Пользователь успешно создан!");
+              alert("Пользтователь успешно создан!")
             } else {
-              console.error("Ошибка при создании пользователя");
+              alert("Ошибка при создании пользователя")
             }
           } catch (error) {
+            alert("Ошибка при создании пользователя")
             console.error("Произошла ошибка", error);
           }
       }
-      else alert("Почта, роль или пароль пусты");;
+      else alert("Форма заполнена не полностью");
     };
 
   if (localStorage.getItem('jwt') === null) return (

@@ -19,7 +19,7 @@ export default function Users() {
 
   return (
     <>
-        <h1>Материалы</h1>
+        <h1>Пользователи</h1>
         <div style={{ display: "flex", justifyContent: "center", backgroundColor: "lightblue",
           width: "50%",
           margin: "auto",
