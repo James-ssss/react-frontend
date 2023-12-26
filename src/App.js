@@ -17,6 +17,8 @@ import Address from './pages/Address';
 import CreateAddress from './pages/CreateAddress';
 import DeleteAddress from './pages/DeleteAddress';
 import OrderDetail from './pages/OrderDetail';
+import MyOrderDetail from './pages/MyOrderDetail';
+import MyTasksList from './Components/MyTaskList';
 function App() {
   return (
     <>
@@ -28,6 +30,7 @@ function App() {
       <Route path='/' Component={Login}/>
       <Route path='/CreateUser' Component={CreateUser}/>
       <Route path='/Orders' Component={Tasks}/>
+      <Route path='/My_Orders' Component={MyTasksList}/>
       <Route path='/Materials' Component={Materials}/>
       <Route path='/Materials/Create' Component={CreateMaterials}/>
       <Route path='/Users/Create' Component={CreateUser}/>
@@ -38,6 +41,7 @@ function App() {
       <Route path='/Address' Component={Address}/>
       <Route path='/Address/Create' Component={CreateAddress}/>
       <Route path='/Address/Delete' Component={DeleteAddress}/>
+      <Route path='/My_Orders/:orderId' Component={MyOrderDetail}/>
       <Route path='/Orders/:orderId' Component={OrderDetail}/>
     </Routes>
     </Router>

@@ -283,7 +283,7 @@ const CreateTask = () => {
         </Form>
         <br/>
         <Form.Group className="mb-3" controlId="formComment">
-          <Form.Label>Адрес доставки</Form.Label>
+          <Form.Label>Выберите адрес из списка или укажите его вручную. Будет использован адрес, который вы указали последним</Form.Label>
           <Form.Select
                         aria-label="Default select example" onChange={(e) => handleInputChangeAddress(e.target.value)}>
                           <option>
@@ -295,6 +295,14 @@ const CreateTask = () => {
                           </option>
                         ))}
           </Form.Select>
+          <br></br>
+          <Form.Group className="mb-3" controlId="formComment">
+          <Form.Control
+            type="text"
+            placeholder="Адрес"
+            onChange={(e) => handleInputChangeAddress(e.target.value) }
+          />
+        </Form.Group>
         </Form.Group>
         <br />
         <Button variant="success" type="submit" onClick={handleSubmit}>

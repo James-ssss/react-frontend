@@ -29,6 +29,7 @@ export default function NaviBar() {
                 <NavLink as={Link} to="/materials" className={location.pathname === '/materials' ? 'active' : ''}>Материалы</NavLink>
                 <NavLink as={Link} to="/users" className={location.pathname === '/users' ? 'active' : ''}>Пользователи</NavLink>
                 <NavLink as={Link} to="/Address" className={location.pathname === '/Address' ? 'active' : ''}>Адреса</NavLink>
+                <NavLink as={Link} to="/My_Orders" className={location.pathname === '/Address' ? 'active' : ''}>Моя заявки</NavLink>
               </>
             )}
             {isLoggedIn && localStorage.getItem('role') == "STAFF" &&(
@@ -38,12 +39,14 @@ export default function NaviBar() {
                 <NavLink as={Link} to="/orders" className={location.pathname === '/orders' ? 'active' : ''}>Посмотреть заявки</NavLink>
                 <NavLink as={Link} to="/materials" className={location.pathname === '/materials' ? 'active' : ''}>Материалы</NavLink> 
                 <NavLink as={Link} to="/Address" className={location.pathname === '/Address' ? 'active' : ''}>Адреса</NavLink>
+                <NavLink as={Link} to="/My_Orders" className={location.pathname === '/Address' ? 'active' : ''}>Моя заявки</NavLink>
               </>
             )}
             {isLoggedIn && localStorage.getItem('role') == "USER" &&(
               <>
                 <NavLink as={Link} to="/createTask" className={location.pathname === '/createTask' ? 'active' : ''}>Создать новую заявку</NavLink> 
                 <NavLink as={Link} to="/Address" className={location.pathname === '/Address' ? 'active' : ''}>Адреса</NavLink>
+                <NavLink as={Link} to="/My_Orders" className={location.pathname === '/Address' ? 'active' : ''}>Моя заявки</NavLink>
               </>
             )}
           </Nav>
