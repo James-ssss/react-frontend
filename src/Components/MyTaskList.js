@@ -38,7 +38,7 @@ const MyTasksList = () => {
     navigate(`/My_Orders/${orderId}`);  // Use navigate instead of history.push
   };
 
-  if (localStorage.getItem("jwt") === null || role === "USER")return (
+  if (localStorage.getItem("jwt") === null)return (
     <>
     <div style={{
               backgroundColor: "red",
